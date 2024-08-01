@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Vue Dynamic Styling</h1>
+    </header>
+    <section id="styling">
+      <div
+        class="demo"
+        :style="{ borderColor: boxASelected ? 'red' : '#CCC' }"
+        @click="boxSelected('A')"
+      ></div>
+      <div
+        class="demo"
+        :style="{ borderColor: boxBSelected ? 'green' : '#CCC' }"
+        @click="boxSelected('B')"
+      ></div>
+      <div
+        class="demo"
+        :style="{ borderColor: boxCSelected ? 'blue' : '#CCC' }"
+        @click="boxSelected('C')"
+      ></div>
+      <h1>Hello Phạm Ngọc Bảo An</h1>
+      <h1>Hello Phúc long </h1>
+    </section>
+  </body>
+</html>
