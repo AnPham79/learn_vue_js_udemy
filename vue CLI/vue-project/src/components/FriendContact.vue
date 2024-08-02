@@ -1,35 +1,53 @@
 <template>
-    <div>
-        <h2>{{ name }}</h2>
-        <button @click="toggleDetail">{{ detailAreVisible ? 'Hide' : 'Show' }} details</button>
-        <ul v-if="detailAreVisible">
-            <li><strong>Phone : {{ phone }}</strong></li>
-            <li><strong>Email : {{ email }}</strong></li>
-        </ul>
-    </div>
+  <div>
+    <h2>{{ name }} - {{ isFavorite === true ? 'favorite' : 'na' }}</h2>
+    <button @click="toggleDetail">{{ detailAreVisible ? 'Hide' : 'Show' }} details</button>
+    <button @click="toggleFavorite">{{ isFavorite === true ? 'unfavorite' : 'favorite' }}</button>
+    <ul v-if="detailAreVisible">
+      <li><strong>Phone: {{ phone }}</strong></li>
+      <li><strong>Email: {{ email }}</strong></li>
+    </ul>
+  </div>
 </template>
+
 <script>
 export default {
-    props : [
-        'name',
-        'phone',
-        'email'
-    ],
-    data() {
-        return {
-            detailAreVisible : false,
-            friend : {
-                id: 1,
-                name: 'Phạm Ngọc Bảo An',
-                phone: '0927553664',
-                email: 'anpnb79@gmail.com'
-            },
-        }
+  props: {
+    name: {
+        type: String,
+        required : true
     },
-    methods : {
-        toggleDetail() {
-            this.detailAreVisible = !this.detailAreVisible;
-        }
+    phone: {
+        type : String,
+        required : true
+    },
+    email: {
+        type : String,
+        required : true
+    },
+    isFavorite: {
+        type : Boolean,
+        required : false,
+        default : false,
+        // boolean thì k cần validate vì nó chỉ trả về đúng hoặc sai
+        // validator: function(value) {
+        //     return value === '1' || value === '0'
+        // } 
     }
-}
+  },
+  emits : ['toggle-favorite'],
+  data() {
+    return {
+      detailAreVisible: false
+    };
+  },
+  methods: {
+    toggleDetail() {
+      this.detailAreVisible = !this.detailAreVisible;
+    },
+    toggleFavorite() {
+      this.$emit('toggle-favorite');
+    }
+  }
+};
 </script>
