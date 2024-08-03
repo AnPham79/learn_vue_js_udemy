@@ -1,26 +1,29 @@
 <template>
   <section>
-    <h2>My list of friends</h2>
+    <h2>My List of Friends</h2>
     <add-friend @add-friend="addFriend"></add-friend>
     <ul>
       <friend-contact 
         v-for="friend in friends" 
-            :key="friend.id" 
-            :name="friend.name" 
-            :phone="friend.phone" 
-            :email="friend.email" 
-            :is-favorite="friend.isFavorite"
-        @toggle-favorite="toggleFavorite(friend.id)">
+        :key="friend.id" 
+        :name="friend.name" 
+        :phone="friend.phone" 
+        :email="friend.email" 
+        :is-favorite="friend.isFavorite" 
+        @toggle-favorite="toggleFavorite(friend.id)" 
+        @un-friend="unFriend(friend.id)">
       </friend-contact>
     </ul>
   </section>
 </template>
 
 <script>
+import AddFriend from './components/AddFriend.vue';
 import FriendContact from './components/FriendContact.vue';
 
 export default {
   components: {
+    AddFriend,
     FriendContact
   },
   data() {
@@ -47,18 +50,21 @@ export default {
     toggleFavorite(id) {
       const friend = this.friends.find(friend => friend.id === id);
       if (friend) {
-        friend.isFavorite = friend.isFavorite === true ? false : true;
+        friend.isFavorite = !friend.isFavorite;
       }
     },
     addFriend(name, phone, email) {
-        const newFriend = {
-            id : new Date().toISOString,
-            name : name,
-            phone : phone,
-            email : email,
-            isFavorite : false
-        }
-        this.friends.push(newFriend)
+      const newFriend = {
+        id: this.friends.length + 1,
+        name: name,
+        phone: phone,
+        email: email,
+        isFavorite: false
+      };
+      this.friends.push(newFriend);
+    },
+    unFriend(id) {
+      this.friends = this.friends.filter(friend => friend.id !== id);
     }
   }
 };

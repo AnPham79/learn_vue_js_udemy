@@ -2,19 +2,19 @@
     <div>
         <form action="" @submit.prevent="submitData">
             <div>
-                <label for="">name</label>
+                <label for="name">Name</label>
                 <input type="text" v-model="name">
             </div>
             <div>
-                <label for="">phone</label>
+                <label for="phone">Phone</label>
                 <input type="text" v-model="phone">
             </div>
             <div>
-                <label for="">email</label>
+                <label for="email">Email</label>
                 <input type="text" v-model="email">
             </div> 
             <div>
-                <button type="submit">Add friend now</button>
+                <button type="submit">Add Friend Now</button>
             </div>
         </form>
     </div>
@@ -32,11 +32,10 @@ export default {
     },
     methods : {
         submitData() {
-            this.$emit('add-friend', 
-                this.name,
-                this.phone,
-                this.email
-            )
+            this.$emit('add-friend', this.name, this.phone, this.email)
+            this.name = ''
+            this.phone = ''
+            this.email = ''
         }
     }
 }
