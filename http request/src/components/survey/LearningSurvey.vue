@@ -1,7 +1,7 @@
 <template>
   <section>
     <base-card>
-      <h2>How was you learning experience?</h2>
+      <h2>How was your learning experience?</h2>
       <form @submit.prevent="submitSurvey">
         <div class="form-control">
           <label for="name">Your Name</label>
@@ -26,9 +26,7 @@
           <input type="radio" id="rating-great" value="great" name="rating" v-model="chosenRating" />
           <label for="rating-great">Great</label>
         </div>
-        <p
-          v-if="invalidInput"
-        >One or more input fields are invalid. Please check your provided data.</p>
+        <p v-if="invalidInput">One or more input fields are invalid. Please check your provided data.</p>
         <p v-if="error">{{ error }}</p>
         <div>
           <base-button>Submit</base-button>
@@ -40,15 +38,16 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   data() {
     return {
       enteredName: '',
       chosenRating: null,
       invalidInput: false,
+      error: null,
     };
   },
-  // emits: ['survey-submit'],
   methods: {
     submitSurvey() {
       if (this.enteredName === '' || !this.chosenRating) {
@@ -56,32 +55,23 @@ export default {
         return;
       }
       this.invalidInput = false;
-
-      // this.$emit('survey-submit', {
-      //   userName: this.enteredName,
-      //   rating: this.chosenRating,
-      // });
-
-      this.error = null
+      this.error = null;
 
       axios.post('https://learn-vue-808a8-default-rtdb.firebaseio.com/surveys.json', {
-            name : this.enteredName,
-            rating : this.chosenRating
-      }).catch(error => {
-          console.log(error)
-          this.error = 'Some what went wrong - try again late >_<'
+        name: this.enteredName,
+        rating: this.chosenRating
       })
-
-      // fetch('https://learn-vue-808a8-default-rtdb.firebaseio.com/surveys.json', {
-      //   method : 'POST',
-      //   headers : {
-      //     'Content-type' : 'application/json'
-      //   },
-      //   body : JSON.stringify({
-      //       name : this.enteredName,
-      //       rating : this.chosenRating
-      //   })
-      // })
+      .then((response) => {
+        if (response.status === 200) {
+          // Handle success
+        } else {
+          throw new Error('Could not save data');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        this.error = error.message;
+      });
 
       this.enteredName = '';
       this.chosenRating = null;
