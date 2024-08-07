@@ -5,7 +5,9 @@
       <div>
         <base-button @click="loadExperiences">Load Submitted Experiences</base-button>
       </div>
-      <ul>
+      <p v-if="isloading">Loading ...</p>
+      <p v-else-if="!isloading && (!results || results.length === 0)">No data</p>
+      <ul v-else-if="!isloading && results && results.length > 0">
         <survey-result
           v-for="result in results"
           :key="result.id"
@@ -18,7 +20,6 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import SurveyResult from './SurveyResult.vue';
 
 export default {
@@ -27,31 +28,41 @@ export default {
   },
   data() {
     return {
-      results : []
-    }
+      results: [],
+      isloading: false,
+    };
   },
-  methods : {
+  methods: {
     loadExperiences() {
-        fetch('https://learn-vue-808a8-default-rtdb.firebaseio.com/surveys.json')
+      this.isloading = true;
+      fetch('https://learn-vue-808a8-default-rtdb.firebaseio.com/surveys.json')
         .then((res) => {
-            if(res.ok) {
-                return res.json();
-            }
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error('Network response was not ok.');
         })
         .then((data) => {
-            const results = [];
-            for( const id in data ) {
-                results.push({
-                    id : id,
-                    name : data[id].name,
-                    rating : data[id].rating
-                })
-            }
-            this.results = results
+          this.isloading = false;
+          const results = [];
+          for (const id in data) {
+            results.push({
+              id: id,
+              name: data[id].name,
+              rating: data[id].rating,
+            });
+          }
+          this.results = results;
         })
-        .catch()
-    }
-  }
+        .catch((error) => {
+          this.isloading = false;
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    },
+  },
+  mounted() {
+    this.loadExperiences();
+  },
 };
 </script>
 
