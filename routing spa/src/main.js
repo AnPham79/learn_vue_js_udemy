@@ -13,14 +13,41 @@ const router = createRouter({
     routes: [
         { path : '/', redirect : 'teams' },
         // { path: '/teams', component: TeamsList , alias : '/'},
-        { path: '/teams', component: TeamsList},
+        { name : 'teams', path: '/teams', component: TeamsList, children : [
+            {
+                name : 'team-members', path : ':teamId', component : TeamMember , props : true
+            }
+        ]},
         { path: '/users', component: UsersList },
         { path: '/teams/:teamId', component: TeamMember, props: true },
         { path: '/:notFound(.*)', component : NotFound }
 
     ],
-    linkActiveClass: 'active'
+    linkActiveClass: 'active',
+    scrollBehavior(_, _2, savedPosition) {
+        if(savedPosition) 
+        {
+            return savedPosition
+        }
+        return { left : 0, top : 0 }
+    }
 });
+
+router.beforeEach(function(to, from, next) {
+    console.log('Global beforeEach');
+    console.log(to, from);
+    // if(to.name === 'team-members') {
+    //     next();
+    // }else {
+    //     next({ name : 'team-members', params : {teamId : 't2' } });
+    // }
+    next()
+})
+
+router.afterEach(function(from, to, next) {
+    console.log('after each')
+    console.log(from, to, next) 
+})
 
 const app = createApp(App);
 

@@ -19,6 +19,11 @@ export default {
       backToTeams() {
         this.$router.push('/teams')
       }
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log(to, from, next);
+    console.log(to, from)
+    next();
   }
 };
 </script>
